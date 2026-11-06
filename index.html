@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Samplia Insights · Sorteo ¿Cuál es tu flor?</title>
+<meta name="color-scheme" content="light" />
+<meta name="description" content="Resultados en vivo del quiz ¿Cuál es tu flor? y de las participaciones con ticket del sorteo." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* Paleta: lksjdfls.pdf. Fondo siempre blanco. */
+  :root {
+    --dusk: #375395;      /* dato principal, suavizantes */
+    --prussian: #0F1729;  /* texto */
+    --blush: #FBDBDF;     /* realces suaves */
+    --melon: #E9455B;     /* perfumadores */
+    --raspberry: #E0253F; /* acción e interacción */
+    --brick: #B51A03;     /* avisos */
+
+    --paper: #FFFFFF;
+    --line: rgba(15, 23, 41, .10);
+    --line-strong: rgba(15, 23, 41, .18);
+    --muted: rgba(15, 23, 41, .64);
+    --faint: rgba(15, 23, 41, .07);
+    --grey-bar: rgba(15, 23, 41, .22);
+
+    --font-display: "Raleway", "Helvetica Neue", Arial, sans-serif;
+    --font-num: "Inter", "Raleway", "Helvetica Neue", Arial, sans-serif;
+    --ease-out: cubic-bezier(.23, 1, .32, 1);
+    --radius-s: 6px;
+    --radius-m: 12px;
+    --page: 1180px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--prussian); font: 400 15px/1.55 var(--font-display); -webkit-font-smoothing: antialiased; }
+  .num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+  button, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--raspberry); outline-offset: 2px; }
+  .wrap { max-width: var(--page); margin: 0 auto; padding: 0 28px; }
+
+  /* ── Cabecera ── */
+  header { border-bottom: 1px solid var(--line); }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 22px 0 0; font-weight: 700; font-size: 15px; }
+  .brand img { width: 28px; height: 28px; }
+  .brand > span { color: var(--muted); font-weight: 500; }
+  .spacer { flex: 1; }
+  .intro { padding: 26px 0 30px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: end; }
+  h1 { margin: 0 0 8px; font-weight: 800; font-size: clamp(32px, 4.4vw, 52px); line-height: 1.04; letter-spacing: -.02em; }
+  .intro p { margin: 0; color: var(--muted); max-width: 60ch; }
+  .sources { display: grid; gap: 6px; font-size: 13px; }
+  .src { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--grey-bar); flex: none; }
+  .dot.live { background: #2E8B57; box-shadow: 0 0 0 3px rgba(46, 139, 87, .15); }
+  .dot.copy { background: var(--melon); }
+
+  .btn { border: 1px solid var(--line-strong); background: var(--paper); border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: transform 160ms var(--ease-out), background-color 160ms ease; }
+  .btn:hover { background: rgba(15, 23, 41, .04); }
+  .btn:active { transform: scale(.97); }
+  .btn.primary { background: var(--raspberry); border-color: var(--raspberry); color: #fff; }
+  .btn.primary:hover { background: #c81f37; }
+  .btn[disabled] { opacity: .6; cursor: progress; }
+
+  /* ── Secciones ── */
+  main { padding: 8px 0 56px; }
+  .section { padding: 34px 0 8px; }
+  .section + .section { border-top: 1px solid var(--line); margin-top: 34px; }
+  .sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 20px; margin-bottom: 18px; }
+  .sec-head h2 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -.015em; }
+  .sec-head p { margin: 4px 0 0; font-size: 13.5px; color: var(--muted); max-width: 70ch; }
+  .notice { font-size: 13px; color: var(--brick); background: var(--blush); border-radius: var(--radius-s); padding: 8px 12px; margin: 0 0 16px; }
+  .notice[hidden] { display: none; }
+
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-m); padding: 20px 22px 16px; min-width: 0; }
+  .card.wide { grid-column: 1 / -1; }
+  .card h3 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+  .card .sub { margin: 3px 0 16px; font-size: 13px; color: var(--muted); max-width: 70ch; }
+  .base { margin: 14px 0 0; padding-top: 10px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+  .regional { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 24px; align-items: start; }
+  .regional-map { min-width: 0; }
+  .regional-map svg { display: block; width: 100%; height: auto; }
+  .map-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin: 2px 0 10px; color: var(--muted); font-size: 12px; }
+  .map-legend span, .map-legend-scale { display: inline-flex; align-items: center; gap: 6px; }
+  .map-legend i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; flex: none; }
+  .map-legend-scale { gap: 5px; }
+  .map-legend-scale i { width: 12px; height: 12px; }
+  .regional .hb { grid-template-columns: minmax(125px, 42%) minmax(0, 1fr) 76px; }
+
+  /* KPIs */
+  .kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--radius-m); margin-bottom: 20px; }
+  .kpi { padding: 18px 20px; border-left: 1px solid var(--line); }
+  .kpi:first-child { border-left: 0; }
+  .kpi .v { font-family: var(--font-num); font-variant-numeric: tabular-nums; font-size: 34px; font-weight: 600; letter-spacing: -.02em; line-height: 1.1; }
+  .kpi .l { font-size: 13px; font-weight: 600; margin-top: 4px; }
+  .kpi .d { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+
+  /* Quiz: total + podio */
+  .quiz-top { display: grid; grid-template-columns: minmax(200px, .8fr) minmax(0, 2.2fr); gap: 20px; margin-bottom: 20px; }
+  .total .v { font: 600 56px/1 var(--font-num); font-variant-numeric: tabular-nums; letter-spacing: -.03em; margin-top: 14px; }
+  .total .l { font-weight: 600; margin-top: 8px; }
+  .total .d { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .podium { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 4px; }
+  .pod { padding: 6px 18px 4px; border-left: 1px solid var(--line); min-width: 0; }
+  .pod:first-child { border-left: 0; padding-left: 0; }
+  .pod .rk { font: 600 13px var(--font-num); color: var(--muted); }
+  .pod .nm { font-size: 19px; font-weight: 700; line-height: 1.2; margin: 4px 0 10px; min-height: 2.4em; }
+  .pod:first-child .nm { color: var(--dusk); }
+  .pod .pc { font: 600 30px/1 var(--font-num); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+  .pod .n { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .pod .bar { height: 6px; border-radius: 3px; background: var(--faint); margin-top: 12px; overflow: hidden; }
+  .pod .bar span { display: block; height: 100%; width: 0; border-radius: 3px; background: var(--dusk); transition: width 260ms var(--ease-out); }
+  .pod:not(:first-child) .bar span { background: rgba(55, 83, 149, .55); }
+  .tie { font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+  /* Preguntas del quiz */
+  .q { min-width: 0; }
+  .q .win { font-size: 15px; font-weight: 700; line-height: 1.3; margin: 2px 0 12px; min-height: 2.6em; }
+  .q .win small { display: block; font: 500 12.5px var(--font-num); color: var(--muted); margin-top: 3px; }
+
+  /* Barras horizontales */
+  .hb { display: grid; grid-template-columns: minmax(110px, 38%) minmax(0, 1fr) 76px; align-items: center; gap: 10px; padding: 4px 0; font-size: 13.5px; }
+  .hb .n { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hb .track { display: flex; height: 14px; background: var(--faint); border-radius: 3px; overflow: hidden; }
+  .hb .fill { display: block; height: 100%; width: 0; transition: width 260ms var(--ease-out); }
+  .hb .v { text-align: right; font-family: var(--font-num); font-variant-numeric: tabular-nums; font-size: 13px; }
+  .hb .v small { color: var(--muted); font-size: 11.5px; margin-left: 4px; }
+  .hb.top .n { font-weight: 700; }
+  .q .hb { grid-template-columns: minmax(0, 1fr) 64px; grid-template-areas: "n v" "t t"; gap: 3px 10px; padding: 5px 0; }
+  .q .hb .n { grid-area: n; white-space: normal; font-size: 13px; }
+  .q .hb .track { grid-area: t; height: 8px; }
+  .q .hb .v { grid-area: v; }
+  .group-t { font-size: 12.5px; font-weight: 700; margin: 12px 0 4px; display: flex; align-items: center; gap: 8px; }
+  .group-t:first-child { margin-top: 0; }
+  .group-t i, .key i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+  .key { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--muted); margin: -6px 0 12px; }
+  .key span { display: inline-flex; align-items: center; gap: 6px; }
+  .empty { padding: 22px 8px; text-align: center; color: var(--muted); font-size: 13.5px; }
+
+  /* Filtros de Tally */
+  .filters { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 18px; }
+  .field { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  .field select { appearance: none; -webkit-appearance: none; border: 1px solid var(--line-strong); background: var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%230F1729' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 10px center; border-radius: var(--radius-s); padding: 6px 28px 6px 10px; font-size: 13px; color: var(--prussian); max-width: 210px; cursor: pointer; }
+  .reset { border: 0; background: none; padding: 4px 2px; font-size: 13px; color: var(--raspberry); font-weight: 600; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .reset[hidden] { display: none; }
+
+  footer { border-top: 1px solid var(--line); padding: 18px 0 30px; font-size: 12px; color: var(--muted); }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 8px); opacity: 0; background: var(--prussian); color: #fff; font-size: 13px; padding: 9px 14px; border-radius: 999px; pointer-events: none; transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out); }
+  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+  .loading { opacity: .55; transition: opacity 160ms ease; }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; animation: none !important; } }
+  @media (max-width: 960px) {
+    .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .quiz-top { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 760px) {
+    .intro { grid-template-columns: 1fr; }
+    .grid, .grid-3 { grid-template-columns: 1fr; }
+    .regional { grid-template-columns: 1fr; gap: 12px; }
+    .podium { grid-template-columns: 1fr; }
+    .pod { border-left: 0; border-top: 1px solid var(--line); padding: 12px 0; }
+    .pod:first-child { border-top: 0; }
+    .pod .nm { min-height: 0; }
+    .kpis { grid-template-columns: 1fr; }
+    .kpi { border-left: 0; border-top: 1px solid var(--line); }
+    .kpi:first-child { border-top: 0; }
+    .q .win { min-height: 0; }
+  }
+  @media (max-width: 560px) {
+    .wrap { padding: 0 16px; }
+    .hb { grid-template-columns: minmax(90px, 40%) minmax(0, 1fr) 66px; }
+    .field select { max-width: 160px; }
+  }
+</style>
+</head>
+<body>
+<header id="hero">
+  <div class="wrap">
+    <div class="brand">
+      <img alt="" src="data:image/png;base64,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" />Samplia <span>Insights</span>
+      <span class="spacer"></span>
+      <button type="button" class="btn" id="refresh">Actualizar datos</button>
+    </div>
+    <div class="intro">
+      <div>
+        <h1>Sorteo ¿Cuál es tu flor?</h1>
+        <p>Resultados del quiz de fragancias y de las participaciones que han enviado su ticket de compra.</p>
+      </div>
+      <div class="sources" aria-live="polite">
+        <div class="src"><span class="dot" id="dotQuiz"></span><span id="stQuiz">Conectando con el quiz…</span></div>
+        <div class="src"><span class="dot" id="dotTally"></span><span id="stTally">Conectando con Tally…</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <!-- ═════ Sección 1: quiz (Google Sheets) ═════ -->
+    <section class="section" id="quiz">
+      <div class="sec-head">
+        <div>
+          <h2>El quiz</h2>
+          <p>Respuestas de la web cualestuflor.es, leídas de la hoja «Sorteo Flor».</p>
+        </div>
+      </div>
+      <p class="notice" id="quizNotice" hidden></p>
+
+      <div class="quiz-top">
+        <div class="card total">
+          <h3>Participaciones</h3>
+          <div class="v" id="quizN">–</div>
+          <div class="l">personas han hecho el quiz</div>
+          <div class="d" id="quizPeriod"></div>
+        </div>
+        <div class="card">
+          <h3>Top 3 de fragancias</h3>
+          <p class="sub">Fragancia que el quiz asigna a cada persona.</p>
+          <div class="podium" id="podium"></div>
+          <div class="tie" id="tie"></div>
+          <p class="base" id="basePodium"></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>La respuesta más votada en cada pregunta</h3>
+        <p class="sub">En negrita, la opción ganadora. Debajo, cómo se reparten todas las respuestas.</p>
+        <div class="grid-3" id="questions"></div>
+        <p class="base" id="baseQuestions"></p>
+      </div>
+    </section>
+
+    <!-- ═════ Sección 2: Tally ═════ -->
+    <section class="section" id="tally">
+      <div class="sec-head">
+        <div>
+          <h2>Participaciones con ticket</h2>
+          <p>Formulario del sorteo en Tally: qué han comprado, dónde y desde qué comunidad participan.</p>
+        </div>
+      </div>
+      <p class="notice" id="tallyNotice" hidden></p>
+
+      <div class="filters" aria-label="Filtros de las participaciones con ticket">
+        <label class="field">Comunidad <select id="fCcaa"></select></label>
+        <label class="field">Establecimiento <select id="fStore"></select></label>
+        <label class="field">Línea <select id="fLine">
+          <option value="">Todas</option>
+          <option value="S">Suavizantes</option>
+          <option value="P">Perfumadores</option>
+        </select></label>
+        <button type="button" class="reset" id="reset" hidden>Quitar filtros</button>
+      </div>
+
+      <div class="kpis" id="kpis"></div>
+
+      <div class="grid">
+        <div class="card wide">
+          <h3>Ranking de fragancias</h3>
+          <p class="sub">Porcentaje de participaciones que han comprado cada fragancia, sumando suavizante y perfumador.</p>
+          <div class="key"><span><i style="background:#375395"></i>Suavizante</span><span><i style="background:#E9455B"></i>Perfumador</span></div>
+          <div id="ranking"></div>
+          <p class="base" id="baseRanking"></p>
+        </div>
+
+        <div class="card">
+          <h3>Qué productos han comprado</h3>
+          <p class="sub">Porcentaje de participaciones que incluyen cada producto. Se puede marcar más de uno, así que la suma pasa del 100 %.</p>
+          <div id="prods"></div>
+          <p class="base" id="baseProds"></p>
+        </div>
+
+        <div class="card">
+          <h3>Dónde los han comprado</h3>
+          <p class="sub">Establecimiento declarado en el formulario.</p>
+          <div id="stores"></div>
+          <p class="base" id="baseStores"></p>
+        </div>
+
+        <div class="card wide">
+          <h3>Desde dónde participan</h3>
+          <p class="sub">Participaciones por comunidad autónoma. Los tonos azules más intensos indican más respuestas.</p>
+          <div class="regional">
+            <div class="regional-map">
+              <div class="map-legend" aria-label="Leyenda del mapa: gris, sin participaciones; cinco tonos azules, de menos a más participaciones.">
+                <span><i style="background:#d8dde5"></i>Sin participaciones</span>
+                <span class="map-legend-scale"><span>Menos</span><i style="background:#dbeafe"></i><i style="background:#93c5fd"></i><i style="background:#60a5fa"></i><i style="background:#2563eb"></i><i style="background:#1e3a8a"></i><span>Más</span></span>
+              </div>
+              <svg id="ccaaMap" viewBox="0 0 420 328" role="img" aria-labelledby="ccaaMapTitle ccaaMapDesc"></svg>
+            </div>
+            <div id="ccaa"></div>
+          </div>
+          <p class="base" id="baseCcaa"></p>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer><div class="wrap" id="foot"></div></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Copias de seguridad sin datos personales: solo se usan si la hoja no responde. -->
+<script type="application/json" id="snapshot-quiz">{"first":"28/10/2026 11:46:36","last":"6/11/2026 2:16:24","frag":["Flor Azul","Flor Nenuco","Flor Original","Flor Mediterráneo","Flor de Cerezo y Frambuesa","Flor Delicias de Verano","Flor Pieles Sensibles","Flor Orquídea Blanca"],"questions":[{"title":"Tipo de aroma","options":["A · Fresco y limpio","B · Floral y envolvente","C · Frutal y dulce"]},{"title":"Cómo se siente","options":["A · Suave y reconfortante","B · Fresca y ligera","C · Intensa y duradera"]},{"title":"Ingredientes","options":["A · Azahar, almizcle blanco y Lavanda","B · Jazmín, rosa y frutas jugosas","C · Bergamota, hierbas y maderas"]},{"title":"Plan para desconectar","options":["A · En casa","B · Al aire libre","C · Con amigos o en una noche especial"]},{"title":"Frase","options":["A · “Lo sencillo es lo que mejor funciona.”","B · “Que no falten la libertad ni los planes improvisados.”","C · “Los pequeños detalles lo cambian todo.”"]}],"rows":[[2,0,1,1,2,0],[0,0,1,0,0,2],[3,1,1,2,1,0],[1,0,2,0,0,2],[4,1,2,1,0,0],[6,1,2,0,1,1],[6,1,2,0,1,1],[7,2,2,2,1,2],[4,2,2,1,0,0],[6,1,0,0,1,0],[7,1,2,1,0,2],[4,2,2,1,2,2],[3,0,1,2,1,0],[3,0,1,2,1,2],[3,0,1,2,1,2],[4,2,2,1,0,2],[4,2,2,1,1,2],[4,1,2,1,2,1],[0,0,1,0,2,1],[1,0,0,0,0,2],[4,1,2,1,1,1],[4,2,2,1,0,2],[6,1,0,0,1,2],[4,1,2,1,2,1],[4,2,2,0,2,1],[1,0,0,0,0,2],[4,2,2,1,1,1],[6,1,0,0,1,1],[4,2,2,1,0,2],[7,1,0,2,1,1],[0,0,1,0,0,1],[6,1,2,0,0,0],[1,0,2,0,2,2],[0,0,2,0,1,2],[3,0,1,2,1,1],[4,0,2,1,2,2],[5,1,0,1,1,1],[1,0,2,0,0,2],[4,1,2,1,1,1],[5,2,0,2,1,0],[0,0,1,0,1,2],[0,0,2,0,1,1],[4,1,2,1,2,1],[6,1,0,0,0,0],[0,0,1,0,0,2],[4,2,2,0,1,2],[6,1,2,0,1,2],[1,0,2,0,0,0],[2,1,1,1,0,1],[3,0,2,2,1,0],[6,1,2,0,1,1],[1,0,0,0,1,0],[4,2,2,0,1,2],[4,2,2,1,0,2],[0,0,1,0,1,2],[2,0,1,1,0,0],[4,2,2,1,0,2],[2,0,1,1,1,2],[4,2,2,1,0,0],[0,0,1,0,1,2],[0,0,2,0,1,2],[1,0,2,0,0,2],[0,0,1,0,1,1],[5,0,0,1,1,0],[1,2,0,0,0,0],[2,0,2,1,0,2],[5,1,0,1,0,1],[0,0,1,0,1,0],[1,0,0,0,0,0],[1,0,0,0,2,2],[1,0,2,0,0,2],[0,0,1,0,0,2],[4,2,2,0,1,2],[6,1,0,0,1,2],[0,0,1,0,1,2],[2,2,1,1,1,0],[0,0,2,0,1,1],[4,2,2,2,2,1],[1,0,0,0,1,1],[2,0,1,1,2,0],[3,1,1,2,1,2],[0,0,1,0,1,0],[0,0,1,0,1,0],[0,0,1,0,1,0],[1,0,0,0,0,2],[4,2,2,1,1,0],[7,2,2,2,2,2],[4,2,2,1,2,2],[0,0,1,0,1,0],[1,0,0,0,1,0],[1,0,2,0,0,2],[2,0,2,1,0,0],[6,1,0,1,0,2],[7,1,2,1,0,2],[0,0,1,0,1,1],[2,0,1,1,2,2],[4,2,2,1,1,2],[4,0,2,1,1,2],[1,0,0,0,1,2],[4,2,2,0,1,2],[1,0,0,0,0,0],[6,1,0,1,0,0],[0,0,1,0,2,2],[2,0,2,1,0,0],[2,0,1,1,0,2],[7,1,2,1,1,2],[4,1,2,1,2,1],[7,1,2,1,2,2],[1,0,0,0,1,0],[0,0,2,0,1,2],[2,0,1,1,0,0],[1,0,0,0,1,0],[6,1,2,0,0,2],[0,0,1,0,1,1],[0,2,1,0,2,2],[1,2,0,0,1,0],[2,1,1,1,0,0],[0,1,1,0,2,0],[4,0,2,1,1,2],[7,2,2,2,1,2],[3,0,0,2,1,0],[5,2,0,1,0,0],[1,0,0,0,0,0],[1,0,0,0,0,0],[0,0,1,0,2,0],[4,2,2,2,1,1],[0,0,1,0,0,0],[1,0,0,0,0,0],[1,0,0,0,0,0],[1,0,0,0,0,0],[7,1,0,2,1,1],[6,2,2,0,0,2],[3,0,1,2,1,1],[0,0,2,0,1,2],[1,0,0,2,0,0],[2,0,0,1,0,0],[6,1,0,1,0,0],[0,0,2,0,1,1],[4,1,2,1,1,1],[2,0,2,1,1,0],[0,0,1,0,1,2],[4,2,2,1,1,2],[6,1,0,2,0,1],[4,2,2,0,1,2],[5,2,0,1,0,1],[2,0,1,1,1,1],[6,1,2,0,0,0],[1,0,0,0,2,0],[1,0,0,0,0,0],[1,0,2,0,0,1],[2,1,1,1,0,2],[4,2,2,0,1,1],[5,0,0,1,1,0],[0,0,1,0,1,2],[5,0,0,1,1,1],[0,0,1,0,1,0],[1,0,0,0,0,0],[0,0,1,0,1,0],[0,0,2,0,1,1],[6,1,0,0,2,2],[0,1,1,0,1,0],[3,0,1,2,2,2],[5,2,0,1,0,1],[4,1,2,1,2,1],[4,2,2,1,0,1],[7,1,2,0,2,1],[1,0,0,0,1,2],[1,0,0,0,0,0],[1,0,0,0,1,0],[0,0,1,0,0,0],[0,0,2,0,1,0],[0,0,1,0,0,0],[3,0,1,2,1,0],[1,0,0,0,1,2],[4,2,2,0,1,1],[3,0,1,2,0,0],[1,0,2,0,2,2],[4,2,2,2,2,1],[1,0,0,0,1,0],[6,1,0,1,0,2],[1,0,0,0,1,1],[3,0,1,2,0,0],[0,0,1,0,1,2],[0,0,1,0,2,2],[5,2,1,1,1,2],[1,0,2,0,2,2],[4,2,2,1,1,1],[0,0,1,0,1,1],[4,2,2,1,1,2],[0,0,1,0,1,0],[3,0,1,2,0,0],[4,2,2,1,1,2],[7,2,2,2,0,0],[5,1,0,1,1,1],[4,1,2,1,0,1],[1,0,0,0,0,0],[6,2,2,0,0,2],[5,1,0,1,1,2],[4,2,2,1,1,2],[2,0,2,1,0,2],[4,1,2,1,0,1],[3,1,1,2,1,1],[1,0,2,0,0,0],[6,1,0,0,1,2],[7,0,2,2,1,2],[2,0,1,1,0,0],[6,1,0,1,0,2],[1,0,2,0,0,0],[6,1,0,0,0,2],[1,0,0,0,1,2],[5,2,0,1,1,0],[4,2,2,1,0,1],[7,1,1,2,0,2],[2,1,1,1,0,0],[0,0,1,0,1,1],[3,0,2,2,1,0],[2,1,1,1,0,2],[7,0,2,2,0,2],[0,0,1,0,0,0],[1,0,2,0,0,0],[2,1,1,1,1,2],[1,0,2,0,0,0],[5,0,0,1,1,0],[5,0,0,1,1,2],[4,1,2,1,1,1],[4,1,2,1,1,1],[0,1,1,0,1,0],[4,2,2,0,1,2]]}</script>
+<script type="application/json" id="snapshot-tally">[{"t":"2026-10-29T09:52","p":["SA","SN","PT","PR","PA"],"s":"Lidl","c":"Comunidad de Madrid"},{"t":"2026-10-29T15:16","p":["SDV"],"s":"Amazon","c":"Comunidad de Madrid"},{"t":"2026-10-30T04:10","p":["SN"],"s":"Alcampo","c":"Cataluña"},{"t":"2026-10-30T08:38","p":["SO"],"s":"Carrefour","c":"Castilla y León"},{"t":"2026-10-30T08:45","p":["SA"],"s":"Clarel","c":"Comunidad de Madrid"},{"t":"2026-10-30T11:04","p":["SA"],"s":"Alcampo","c":"Comunidad de Madrid"},{"t":"2026-10-30T12:30","p":["SA"],"s":"Eroski","c":"La Rioja"},{"t":"2026-10-30T12:58","p":["SA"],"s":"Amazon","c":"Andalucía"},{"t":"2026-10-30T13:00","p":["PA"],"s":"Gadis","c":"Castilla y León"},{"t":"2026-10-30T15:29","p":["SO"],"s":"Dia","c":"Comunidad de Madrid"},{"t":"2026-10-30T16:33","p":["SN"],"s":"Otro establecimiento","c":"Asturias"},{"t":"2026-10-30T16:54","p":["SA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-10-30T17:08","p":["SCF"],"s":"Carrefour","c":"Castilla y León"},{"t":"2026-10-30T19:27","p":["SA"],"s":"Eroski","c":"País Vasco"},{"t":"2026-10-30T19:30","p":["SA","SN","SCF"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-10-30T20:48","p":["SCF"],"s":"Carrefour","c":"Región de Murcia"},{"t":"2026-10-30T22:39","p":["SM"],"s":"Carrefour","c":"Cataluña"},{"t":"2026-10-30T23:04","p":["SA"],"s":"Amazon","c":"Castilla y León"},{"t":"2026-10-31T01:31","p":["SA"],"s":"Otro establecimiento","c":"Comunidad de Madrid"},{"t":"2026-10-31T11:00","p":["SA"],"s":"BM","c":"País Vasco"},{"t":"2026-10-31T12:24","p":["SA"],"s":"Dia","c":"Cataluña"},{"t":"2026-10-31T14:31","p":["SA"],"s":"Ahorramás","c":"Comunidad de Madrid"},{"t":"2026-10-31T17:50","p":["SA"],"s":"Clarel","c":"Aragón"},{"t":"2026-10-31T20:04","p":["SM","SDV","SOB"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-10-31T20:37","p":["PA"],"s":"Carrefour","c":"Comunidad Valenciana"},{"t":"2026-10-31T23:32","p":["SO"],"s":"Carrefour","c":"Comunidad Valenciana"},{"t":"2026-10-31T23:40","p":["SO"],"s":"Carrefour","c":"Comunidad Valenciana"},{"t":"2026-11-01T10:33","p":["PA"],"s":"Carrefour","c":"Andalucía"},{"t":"2026-11-01T11:17","p":["SA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-01T12:17","p":["SA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-01T12:30","p":["SOB","SN","SPS","SM"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-01T12:42","p":["SA","PR","SPS","SCF"],"s":"Alcampo","c":"Aragón"},{"t":"2026-11-01T13:09","p":["PA"],"s":"Dinosol","c":"Canarias"},{"t":"2026-11-01T13:45","p":["SM","SN","SDV"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-01T14:51","p":["SA"],"s":"Dia","c":"Cataluña"},{"t":"2026-11-01T18:14","p":["PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-01T19:41","p":["SA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-01T20:16","p":["SA"],"s":"Otro establecimiento","c":"Extremadura"},{"t":"2026-11-01T21:44","p":["PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-01T23:38","p":["SO"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-02T00:31","p":["SO"],"s":"BM","c":"Cantabria"},{"t":"2026-11-02T05:42","p":["PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-02T07:29","p":["SO"],"s":"Carrefour","c":"Cataluña"},{"t":"2026-11-02T08:32","p":["SOB","SO","SA","SN","PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-02T09:52","p":["SA"],"s":"Ahorramás","c":"Comunidad de Madrid"},{"t":"2026-11-02T11:41","p":["SN"],"s":"Alcampo","c":"Cataluña"},{"t":"2026-11-02T11:47","p":["SA"],"s":"Eroski","c":"País Vasco"},{"t":"2026-11-02T15:14","p":["SA"],"s":"Amazon","c":"Extremadura"},{"t":"2026-11-02T17:11","p":["PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-02T17:52","p":["OT"],"s":"El Corte Inglés","c":"Comunidad Valenciana"},{"t":"2026-11-02T19:21","p":["SA"],"s":"Otro establecimiento","c":"Extremadura"},{"t":"2026-11-02T20:43","p":["SO"],"s":"Consum","c":"Comunidad Valenciana"},{"t":"2026-11-02T21:13","p":["PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-02T21:40","p":["PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-03T05:18","p":["PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-03T06:17","p":["PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-03T07:48","p":["PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-03T13:41","p":["SN"],"s":"Ahorramás","c":"Comunidad de Madrid"},{"t":"2026-11-03T14:43","p":["PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-03T15:40","p":["SO"],"s":"Alcampo","c":"Comunidad de Madrid"},{"t":"2026-11-03T15:51","p":["PR"],"s":"Alcampo","c":"Comunidad Valenciana"},{"t":"2026-11-03T16:51","p":["SA"],"s":"Coviran","c":"País Vasco"},{"t":"2026-11-03T17:39","p":["SN"],"s":"Condis","c":"Cataluña"},{"t":"2026-11-03T19:00","p":["SN"],"s":"Otro establecimiento","c":"Castilla y León"},{"t":"2026-11-03T19:45","p":["SA"],"s":"Otro establecimiento","c":"Extremadura"},{"t":"2026-11-04T17:00","p":["SOB","SDV","SA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-04T18:26","p":["SA"],"s":"Eroski","c":"País Vasco"},{"t":"2026-11-04T20:02","p":["SA"],"s":"Otro establecimiento","c":"Extremadura"},{"t":"2026-11-05T07:13","p":["SA"],"s":"Otro establecimiento","c":"Comunidad de Madrid"},{"t":"2026-11-05T14:29","p":["SM"],"s":"Consum","c":"Comunidad Valenciana"},{"t":"2026-11-05T19:25","p":["SA"],"s":"Otro establecimiento","c":"Extremadura"},{"t":"2026-11-05T21:24","p":["PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-05T22:18","p":["SA"],"s":"Alcampo","c":"Canarias"},{"t":"2026-11-05T22:30","p":["PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-05T22:31","p":["PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-05T22:32","p":["PA"],"s":"Carrefour","c":"Comunidad de Madrid"},{"t":"2026-11-06T04:39","p":["PA"],"s":"Carrefour","c":"Andalucía"}]</script>
+<script>
+(() => {
+  'use strict';
+  const CONFIG = {
+    sheet: {
+      id: '1bnfjKt4doYfU2H7WqSaUHA95zjXQiNGrcyjZKhd7ek0',
+      quizTab: 'Respuestas',   // columnas C (fragancia) y D–H (preguntas)
+      tallyTab: 'Tally'        // pestaña sin datos personales alimentada por la integración de Tally
+    },
+    snapshotDate: '6 de noviembre de 2026',
+    autoRefreshMin: 5,
+    products: {
+      SA:  { line: 'S', variety: 'Azul',               match: 'suavizante concentrado flor azul' },
+      SN:  { line: 'S', variety: 'Nenuco',             match: 'suavizante concentrado flor nenuco' },
+      SO:  { line: 'S', variety: 'Original',           match: 'suavizante concentrado flor original' },
+      SM:  { line: 'S', variety: 'Mediterráneo',       match: 'suavizante concentrado flor mediterraneo' },
+      SDV: { line: 'S', variety: 'Delicias de Verano', match: 'suavizante concentrado flor delicias de verano' },
+      SCF: { line: 'S', variety: 'Cerezo y Frambuesa', match: 'suavizante concentrado flor de cerezo y frambuesa' },
+      SOB: { line: 'S', variety: 'Orquídea Blanca',    match: 'suavizante concentrado flor orquidea blanca' },
+      SPS: { line: 'S', variety: 'Pieles Sensibles',   match: 'suavizante concentrado flor pieles sensibles' },
+      PA:  { line: 'P', variety: 'Azul',               match: 'perfumador liquido flor azul' },
+      PR:  { line: 'P', variety: 'Rosa',               match: 'perfumador liquido flor rosa' },
+      PT:  { line: 'P', variety: 'Tropical',           match: 'perfumador liquido flor tropical' },
+      OT:  { line: 'O', variety: 'Otros productos Flor', match: 'otros' }
+    },
+    lines: {
+      S: { name: 'Suavizante concentrado', group: 'Suavizantes concentrados', hex: '#375395' },
+      P: { name: 'Perfumador líquido', group: 'Perfumadores líquidos', hex: '#E9455B' },
+      O: { name: 'Otros', group: 'Otros', hex: '#8A8F9B' }
+    },
+    topStores: 8
+  };
+
+  const $ = (s) => document.querySelector(s);
+  const nf = new Intl.NumberFormat('es-ES');
+  const pf = (x) => (Math.round(x * 1000) / 10).toLocaleString('es-ES', { maximumFractionDigits: x * 100 < 10 ? 1 : 0 }) + '\u202F%';
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const norm = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+  const timeNow = () => new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+  /* ═════ Lectura de Google Sheets ═════
+     1) CSV de gviz (CORS abierto en hojas compartidas por enlace)
+     2) JSONP de gviz (sin CORS)
+     3) Copia embebida */
+  function parseCSV(text) {
+    const rows = []; let row = []; let cell = ''; let q = false;
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (q) {
+        if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; }
+        else cell += ch;
+      } else if (ch === '"') q = true;
+      else if (ch === ',') { row.push(cell); cell = ''; }
+      else if (ch === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
+      else if (ch !== '\r') cell += ch;
+    }
+    if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+    return rows;
+  }
+  const gvizUrl = (tab, out) => `https://docs.google.com/spreadsheets/d/${CONFIG.sheet.id}/gviz/tq?headers=1&sheet=${encodeURIComponent(tab)}&tqx=${out}&_=${Date.now()}`;
+  async function viaCSV(tab) {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 12000);
+    try {
+      const res = await fetch(gvizUrl(tab, 'out:csv'), { signal: ctrl.signal, cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const txt = await res.text();
+      if (/^\s*</.test(txt)) throw new Error('La hoja devolvió HTML (¿pestaña inexistente o sin permisos?)');
+      const rows = parseCSV(txt);
+      return { header: rows[0] || [], rows: rows.slice(1) };
+    } finally { clearTimeout(t); }
+  }
+  let cbN = 0;
+  function viaJSONP(tab) {
+    return new Promise((ok, ko) => {
+      const name = '__gviz' + (++cbN);
+      const s = document.createElement('script');
+      const t = setTimeout(() => { cleanup(); ko(new Error('Tiempo de espera agotado')); }, 12000);
+      function cleanup() { clearTimeout(t); delete window[name]; s.remove(); }
+      window[name] = (resp) => {
+        cleanup();
+        if (!resp || resp.status === 'error') return ko(new Error((resp && resp.errors && resp.errors[0] && resp.errors[0].detailed_message) || 'Error de la hoja'));
+        const cols = resp.table.cols.map((c) => c.label || c.id);
+        const rows = resp.table.rows.map((r) => r.c.map((c) => (c == null ? '' : (c.f != null ? c.f : (c.v == null ? '' : String(c.v))))));
+        ok({ header: cols, rows });
+      };
+      s.src = gvizUrl(tab, `out:json;responseHandler:${name}`);
+      s.onerror = () => { cleanup(); ko(new Error('No se pudo cargar la hoja')); };
+      document.head.appendChild(s);
+    });
+  }
+  async function loadTab(tab) {
+    try { return await viaCSV(tab); }
+    catch (e1) { return await viaJSONP(tab); }
+  }
+
+  /* ═════ Sección 1: quiz ═════ */
+  const stripLetter = (s) => String(s || '').replace(/^\s*[A-Z]\s*·\s*/, '').trim();
+  const qTitle = (h) => String(h || '').replace(/^\s*P\d+\s*·\s*/, '').trim();
+
+  function quizFromSheet(t) {
+    // Columna C = índice 2; D–H = índices 3–7 (posiciones pedidas, no nombres).
+    const header = t.header;
+    const rows = t.rows.filter((r) => r[2] && String(r[2]).trim());
+    return {
+      dates: rows.map((r) => r[0]),
+      frag: rows.map((r) => String(r[2]).trim()),
+      questions: [3, 4, 5, 6, 7].map((i) => ({ title: qTitle(header[i]) || `Pregunta ${i - 2}`, answers: rows.map((r) => String(r[i] || '').trim()).filter(Boolean) }))
+    };
+  }
+  function quizFromSnapshot() {
+    const s = JSON.parse($('#snapshot-quiz').textContent);
+    return {
+      dates: [s.first, s.last],
+      frag: s.rows.map((r) => s.frag[r[0]]),
+      questions: s.questions.map((q, qi) => ({ title: q.title, answers: s.rows.map((r) => q.options[r[qi + 1]]) })),
+      count: s.rows.length
+    };
+  }
+  const parseEsDate = (s) => {
+    const m = String(s || '').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+    return m ? new Date(+m[3], +m[2] - 1, +m[1]) : null;
+  };
+  const longDay = (d) => d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+
+  function countBy(list) {
+    const c = new Map();
+    list.forEach((v) => c.set(v, (c.get(v) || 0) + 1));
+    return [...c.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'es'));
+  }
+
+  function renderQuiz(q) {
+    const n = q.frag.length;
+    $('#quizN').textContent = nf.format(n);
+    const ds = q.dates.map(parseEsDate).filter(Boolean).sort((a, b) => a - b);
+    $('#quizPeriod').textContent = ds.length ? `Del ${longDay(ds[0])} al ${longDay(ds[ds.length - 1])}` : '';
+
+    const ranked = countBy(q.frag);
+    const top = ranked.slice(0, 3);
+    const max = top.length ? top[0][1] : 1;
+    $('#podium').innerHTML = top.map(([name, c], i) => `
+      <div class="pod">
+        <div class="rk">${i + 1}.º</div>
+        <div class="nm">${esc(name)}</div>
+        <div class="pc">${pf(c / n)}</div>
+        <div class="n">${nf.format(c)} personas</div>
+        <div class="bar"><span data-w="${(c / max) * 100}"></span></div>
+      </div>`).join('') || '<div class="empty">Aún no hay respuestas.</div>';
+    // Empates en torno al podio
+    const ties = [];
+    if (ranked.length > 3 && ranked[3][1] === ranked[2][1]) ties.push(`${ranked[3][0]} empata con el tercer puesto (${nf.format(ranked[3][1])}).`);
+    for (let i = 0; i < Math.min(2, top.length - 1); i++) if (top[i][1] === top[i + 1][1]) ties.push(`${top[i][0]} y ${top[i + 1][0]} empatan; el orden entre ellas es alfabético.`);
+    $('#tie').textContent = ties.join(' ');
+    $('#basePodium').textContent = `Base: ${nf.format(n)} respuestas. Fragancias distintas asignadas: ${ranked.length}.`;
+
+    $('#questions').innerHTML = q.questions.map((qq) => {
+      const c = countBy(qq.answers);
+      const tot = qq.answers.length || 1;
+      const maxC = c.length ? c[0][1] : 1;
+      const winners = c.filter((x) => x[1] === maxC);
+      const winTxt = winners.map((w) => stripLetter(w[0])).join(' / ');
+      return `<div class="q">
+        <h3 style="font-size:14px;color:var(--muted);font-weight:600">${esc(qq.title)}</h3>
+        <div class="win">${esc(winTxt)}<small>${pf(maxC / tot)} de las respuestas${winners.length > 1 ? ', empate' : ''}</small></div>
+        ${c.map(([a, k]) => `<div class="hb${k === maxC ? ' top' : ''}" title="${esc(stripLetter(a))}: ${nf.format(k)}">
+            <span class="n">${esc(stripLetter(a))}</span>
+            <span class="track"><span class="fill" style="background:${k === maxC ? '#375395' : 'rgba(15,23,41,.22)'}" data-w="${(k / maxC) * 100}"></span></span>
+            <span class="v">${pf(k / tot)}<small>${nf.format(k)}</small></span>
+          </div>`).join('')}
+      </div>`;
+    }).join('');
+    $('#baseQuestions').textContent = `Base: ${nf.format(n)} respuestas. Una sola respuesta por pregunta.`;
+    growBars($('#quiz'));
+  }
+
+  /* ═════ Sección 2: Tally ═════ */
+  const PROD_KEYS = Object.keys(CONFIG.products);
+  const productCode = (txt) => {
+    const t = norm(txt);
+    return PROD_KEYS.find((k) => CONFIG.products[k].match === t) || PROD_KEYS.find((k) => k !== 'OT' && t.includes(CONFIG.products[k].match)) || (t ? 'OT' : null);
+  };
+  const truthy = (v) => /^(true|verdadero|1|s[ií]|x|yes)$/i.test(String(v).trim());
+
+  function tallyFromSheet(t) {
+    const H = t.header.map(norm);
+    const find = (...keys) => H.findIndex((h) => keys.some((k) => h.includes(k)));
+    const iDate = find('submitted', 'fecha', 'enviado');
+    const iStore = find('establecimiento');
+    const iCcaa = find('comunidad');
+    // Productos: una columna con valores separados por comas, o una columna por opción.
+    const prodCols = H.map((h, i) => (h.includes('producto') ? i : -1)).filter((i) => i >= 0);
+    if (iStore < 0 || iCcaa < 0 || !prodCols.length) {
+      throw new Error('La pestaña no tiene las columnas esperadas (productos, establecimiento, comunidad).');
+    }
+    const perOption = prodCols.length > 1;
+    const rows = t.rows.map((r) => {
+      let p = [];
+      if (perOption) {
+        prodCols.forEach((i) => {
+          if (!truthy(r[i])) return;
+          const opt = (t.header[i].match(/\(([^)]+)\)\s*$/) || [])[1] || t.header[i];
+          const code = productCode(opt); if (code) p.push(code);
+        });
+      } else {
+        p = String(r[prodCols[0]] || '').split(/\s*,\s*/).map(productCode).filter(Boolean);
+      }
+      return { t: iDate >= 0 ? r[iDate] : '', p: [...new Set(p)], s: String(r[iStore] || '').trim(), c: String(r[iCcaa] || '').trim() };
+    }).filter((r) => r.p.length || r.s || r.c);
+    return rows;
+  }
+  const tallyFromSnapshot = () => JSON.parse($('#snapshot-tally').textContent).map((r) => ({ t: r.t, p: r.p, s: r.s, c: r.c }));
+
+  let TALLY = [];
+  const state = { ccaa: '', store: '', line: '' };
+  const CCAA_REGIONS = [
+    { id: 'andalucia', name: 'Andalucía', aliases: [] },
+    { id: 'aragon', name: 'Aragón', aliases: [] },
+    { id: 'asturias', name: 'Asturias', aliases: ['Principado de Asturias'] },
+    { id: 'baleares', name: 'Islas Baleares', aliases: ['Illes Balears', 'Baleares'] },
+    { id: 'canarias', name: 'Canarias', aliases: ['Islas Canarias'] },
+    { id: 'cantabria', name: 'Cantabria', aliases: [] },
+    { id: 'castilla-leon', name: 'Castilla y León', aliases: [] },
+    { id: 'castilla-la-mancha', name: 'Castilla-La Mancha', aliases: [] },
+    { id: 'cataluna', name: 'Cataluña', aliases: ['Catalunya'] },
+    { id: 'valenciana', name: 'Comunidad Valenciana', aliases: ['Comunitat Valenciana'] },
+    { id: 'extremadura', name: 'Extremadura', aliases: [] },
+    { id: 'galicia', name: 'Galicia', aliases: [] },
+    { id: 'madrid', name: 'Comunidad de Madrid', aliases: ['Madrid'] },
+    { id: 'murcia', name: 'Región de Murcia', aliases: ['Murcia'] },
+    { id: 'navarra', name: 'Navarra', aliases: ['Comunidad Foral de Navarra'] },
+    { id: 'pais-vasco', name: 'País Vasco', aliases: ['Euskadi'] },
+    { id: 'rioja', name: 'La Rioja', aliases: [] }
+  ];
+  const CCAA_BLUES = ['#dbeafe', '#93c5fd', '#60a5fa', '#2563eb', '#1e3a8a'];
+  const CCAA_MAP_DOTS = {
+    andalucia: '4:20-21;5:18-22;6:17-23;7:17-26;8:17-39;9:15-40;10:11-40;11:11-40;12:11-39;13:12-39;14:13-16,19-37;15:21-37;16:21-26,28,30-36;17:23-24',
+    aragon: '25:45-46;26:42-48;27:42-48;28:42-48;29:42-51;30:41-51;31:39-52;32:39-51;33:41-51;34:41-52;35:43-53;36:43-53;37:43-53;38:44-53;39:46-49',
+    asturias: '40:15-16;41:15-23;42:13-26;43:13-22',
+    baleares: '19:57;21:66;22:63,65-67;23:64-68;24:66,72',
+    canarias: '3:3-4;4:4,27-28;5:26-29;6:26-29;7:26-29;8:11-12,16-18,27-29,39-40;9:11,16-19,41;10:15-19,42-44;11:15-19,42-44;12:18-20,42-44;13:5,20-21,43-45;14:5,21-22,44-45;15:4-5,44-45;16:4-6,44;17:4-5;18:45-46;19:46-48;20:46-48;21:49;22:49',
+    cantabria: '40:28-29;41:25-30,32;42:27-33',
+    'castilla-leon': '26:14-15,21-26;27:15-27;28:15-28;29:15-29;30:15-30;31:15-32,37-38;32:17-38;33:18-40;34:16-40;35:14-38;36:14-33;37:15-33;38:13-33;39:14-33,35-36;40:14,17-27,30-34;41:24,31,33',
+    'castilla-la-mancha': '15:38;16:27,29,37-42;17:25-42;18:24-44;19:25-43;20:25-43;21:26-42;22:24-41;23:23-43;24:22-29,31-43;25:23-30,34-42;26:27,34-41;27:34-41;28:33-41;29:32-41;30:33-40;31:33-36',
+    cataluna: '28:52-54;29:52-54;30:52-55;31:53-59;32:52-61;33:52-64;34:53-66;35:54-66;36:54-66;37:54-60,62,65-66;38:54-57;39:54-55',
+    valenciana: '14:45-46;15:45-47;16:45-47;17:45-49;18:45-51;19:44-49;20:44-48;21:43-48;22:42-48;23:44-49;24:44-49;25:43-44,47-50;26:49-51;27:49-52;28:49-51',
+    extremadura: '14:17-18;15:13-20;16:12-20;17:12-22;18:13-23;19:14-24;20:13-24;21:12-25;22:12-23;23:14-22;24:14-21;25:14-22;26:16-20',
+    galicia: '35:4,8-13;36:4-13;37:5-14;38:4-12;39:4-13;40:2-13;41:2-14;42:7-12;43:7-12;44:8-9',
+    madrid: '24:30;25:31-33;26:28-33;27:28-33;28:29-32;29:30-31;30:31-32',
+    murcia: '11:41-42;12:40-46;13:40-46;14:38-44;15:39-44;16:43-44;17:43-44',
+    navarra: '35:41-42;36:42;37:39-42;38:38-43;39:39-45;40:39-46;41:40-42',
+    'pais-vasco': '38:36-37;39:34-38;40:35-38;41:34-39;42:34-37',
+    rioja: '35:39-40;36:34-41;37:34-38;38:34-35'
+  };
+  const CCAA_KEY_BY_NAME = new Map();
+  CCAA_REGIONS.forEach((region) => [region.name, ...region.aliases].forEach((name) => CCAA_KEY_BY_NAME.set(norm(name), region.id)));
+  const fragName = (v) => 'Flor ' + (v === 'Cerezo y Frambuesa' ? 'de ' : '') + v;
+  const prodName = (k) => {
+    const p = CONFIG.products[k];
+    return p.line === 'O' ? p.variety : `${CONFIG.lines[p.line].name} Flor ${p.variety}`;
+  };
+
+  function fillSelect(el, values, allLabel, current) {
+    el.innerHTML = `<option value="">${allLabel}</option>` + values.map((v) => `<option${v === current ? ' selected' : ''}>${esc(v)}</option>`).join('');
+  }
+  function setupFilters() {
+    const byFreq = (key) => countBy(TALLY.map((r) => r[key]).filter(Boolean)).map((x) => x[0]);
+    const cc = byFreq('c'); const st = byFreq('s');
+    if (state.ccaa && !cc.includes(state.ccaa)) state.ccaa = '';
+    if (state.store && !st.includes(state.store)) state.store = '';
+    fillSelect($('#fCcaa'), cc, 'Todas', state.ccaa);
+    fillSelect($('#fStore'), st, 'Todos', state.store);
+  }
+  const matchCtx = (r) =>
+    (!state.ccaa || r.c === state.ccaa) &&
+    (!state.store || r.s === state.store) &&
+    (!state.line || r.p.some((k) => CONFIG.products[k].line === state.line));
+
+  function hbars(el, items, base, opt = {}) {
+    const max = Math.max(1, ...items.map((i) => i.n));
+    let html = ''; let lastGroup = null;
+    items.forEach((it) => {
+      if (opt.grouped && it.group !== lastGroup) {
+        lastGroup = it.group;
+        html += `<div class="group-t"><i style="background:${it.color}"></i>${esc(it.group)}</div>`;
+      }
+      const segs = it.segs || [{ n: it.n, color: it.color }];
+      html += `<div class="hb" title="${esc(it.name)}: ${nf.format(it.n)}">
+        <span class="n">${esc(it.label || it.name)}</span>
+        <span class="track">${segs.map((s) => `<span class="fill" style="background:${s.color}" data-w="${base ? (s.n / max) * 100 : 0}" title="${esc(s.title || it.name)}: ${nf.format(s.n)}"></span>`).join('')}</span>
+        <span class="v">${base ? pf(it.n / base) : '–'}<small>${nf.format(it.n)}</small></span>
+      </div>`;
+    });
+    el.innerHTML = html || '<div class="empty">No hay participaciones con estos filtros. Prueba a quitar alguno.</div>';
+  }
+  function growBars(scope) {
+    requestAnimationFrame(() => scope.querySelectorAll('[data-w]').forEach((f) => { f.style.width = f.dataset.w + '%'; }));
+  }
+
+  function renderTally() {
+    const rows = TALLY.filter(matchCtx);
+    const n = rows.length;
+    const filtered = state.ccaa || state.store || state.line;
+    const multi = rows.filter((r) => r.p.length > 1).length;
+    const regions = new Set(rows.map((r) => r.c).filter(Boolean)).size;
+    $('#kpis').innerHTML = [
+      { v: nf.format(n), l: 'Participaciones', d: filtered ? `de ${nf.format(TALLY.length)} recibidas` : 'Todas las recibidas' },
+      { v: n ? pf(multi / n) : '–', l: 'Compran más de un producto', d: `${nf.format(multi)} participaciones` },
+      { v: nf.format(regions), l: 'Comunidades autónomas', d: 'con al menos una participación' }
+    ].map((x) => `<div class="kpi"><div class="v">${x.v}</div><div class="l">${x.l}</div><div class="d">${x.d}</div></div>`).join('');
+
+    // Ranking de fragancias: variedad = suavizante + perfumador.
+    const vr = new Map();
+    rows.forEach((r) => {
+      const seen = new Set();
+      r.p.forEach((k) => {
+        const p = CONFIG.products[k]; if (p.line === 'O') return;
+        const v = vr.get(p.variety) || { any: 0, S: 0, P: 0 };
+        v[p.line]++;
+        if (!seen.has(p.variety)) { v.any++; seen.add(p.variety); }
+        vr.set(p.variety, v);
+      });
+    });
+    const rk = [...vr.entries()].sort((a, b) => b[1].any - a[1].any || a[0].localeCompare(b[0], 'es'));
+    hbars($('#ranking'), rk.map(([v, c], i) => {
+      // Si alguien compró ambos, la barra se reparte en proporción a las menciones.
+      const tot = c.S + c.P;
+      return {
+        name: fragName(v), label: `${i + 1}. ${fragName(v)}`, n: c.any,
+        segs: [
+          { n: c.any * (c.S / tot), color: '#375395', title: `Suavizante ${fragName(v)} (${c.S})` },
+          { n: c.any * (c.P / tot), color: '#E9455B', title: `Perfumador ${fragName(v)} (${c.P})` }
+        ].filter((s) => s.n > 0)
+      };
+    }), n);
+    $('#baseRanking').textContent = `Base: ${nf.format(n)} participaciones. Cada participación cuenta una vez por fragancia aunque compre suavizante y perfumador.`;
+
+    const pc = {};
+    rows.forEach((r) => r.p.forEach((k) => { pc[k] = (pc[k] || 0) + 1; }));
+    const items = PROD_KEYS.map((k) => ({ k, n: pc[k] || 0, line: CONFIG.products[k].line })).filter((it) => it.n)
+      .sort((a, b) => 'SPO'.indexOf(a.line) - 'SPO'.indexOf(b.line) || b.n - a.n)
+      .map((it) => ({ name: prodName(it.k), label: CONFIG.products[it.k].variety, n: it.n, color: CONFIG.lines[it.line].hex, group: CONFIG.lines[it.line].group }));
+    hbars($('#prods'), items, n, { grouped: true });
+    const mentions = Object.values(pc).reduce((a, b) => a + b, 0);
+    $('#baseProds').textContent = `Base: ${nf.format(n)} participaciones, ${nf.format(mentions)} menciones. Respuesta múltiple.`;
+
+    simple($('#stores'), rows, 's', CONFIG.topStores);
+    $('#baseStores').textContent = `Base: ${nf.format(n)} participaciones.`;
+    renderCcaa(rows);
+    $('#baseCcaa').innerHTML = `Base: ${nf.format(n)} participaciones. Canarias se muestra en un detalle; los puntos representan comunidades autónomas, no localidades. Cartografía: <a href="https://github.com/josemamira/covid19maps/blob/master/src/data/ccaa_min.geojson" target="_blank" rel="noopener noreferrer">GeoJSON de josemamira/covid19maps</a>.`;
+    $('#reset').hidden = !filtered;
+    growBars($('#tally'));
+  }
+  function simple(el, rows, key, limit) {
+    let items = countBy(rows.map((r) => r[key]).filter(Boolean)).map(([k, c]) => ({ name: k, n: c, color: '#375395' }));
+    const other = items.find((i) => i.name === 'Otro establecimiento');
+    if (other) { items = items.filter((i) => i !== other); other.color = 'rgba(15,23,41,.35)'; }
+    if (limit && items.length > limit) {
+      const rest = items.slice(limit);
+      items = items.slice(0, limit);
+      items.push({ name: `Resto (${rest.length})`, n: rest.reduce((s, i) => s + i.n, 0), color: 'rgba(15,23,41,.35)' });
+    }
+    if (other) items.push(other);
+    hbars(el, items, rows.length);
+  }
+  function renderCcaa(rows) {
+    const totals = new Map(CCAA_REGIONS.map((region) => [region.id, 0]));
+    const unmatched = new Map();
+    rows.forEach((row) => {
+      if (!row.c) return;
+      const id = CCAA_KEY_BY_NAME.get(norm(row.c));
+      if (id) totals.set(id, totals.get(id) + 1);
+      else unmatched.set(row.c, (unmatched.get(row.c) || 0) + 1);
+    });
+
+    const ranked = CCAA_REGIONS.map((region) => ({ id: region.id, name: region.name, n: totals.get(region.id) }))
+      .filter((region) => region.n > 0);
+    unmatched.forEach((n, name) => ranked.push({ id: '', name, n }));
+    ranked.sort((a, b) => b.n - a.n || a.name.localeCompare(b.name, 'es'));
+
+    const levels = [...new Set(ranked.map((region) => region.n))].sort((a, b) => b - a);
+    const levelFor = (n) => levels.length < 2 ? 2 : Math.round((levels.length - 1 - levels.indexOf(n)) * 4 / (levels.length - 1));
+    const colorById = new Map(ranked.filter((region) => region.id).map((region) => [region.id, CCAA_BLUES[levelFor(region.n)]]));
+    hbars($('#ccaa'), ranked.map((region) => ({
+      name: region.name, n: region.n,
+      color: CCAA_BLUES[levelFor(region.n)]
+    })), rows.length);
+
+    const dotMarkup = (encoded, canarias) => {
+      if (!encoded) return '';
+      let html = '';
+      encoded.split(';').forEach((row) => {
+        const [rowIndex, runs] = row.split(':');
+        runs.split(',').forEach((run) => {
+          const [start, end = start] = run.split('-').map(Number);
+          for (let i = start; i <= end; i++) {
+            const cx = canarias ? 20 + i * 1.8 : 8 + i * 5.32;
+            const cy = canarias ? 300 - Number(rowIndex) * 1.28 : 269.6 - Number(rowIndex) * 5.605;
+            html += `<circle cx="${cx}" cy="${cy}" r="1.45"></circle>`;
+          }
+        });
+      });
+      return html;
+    };
+    const svg = $('#ccaaMap');
+    svg.innerHTML = `<title id="ccaaMapTitle">Participaciones por comunidad autónoma</title>
+      <desc id="ccaaMapDesc">Mapa de España formado por puntos. El azul más oscuro representa más participaciones. Canarias aparece como detalle.</desc>` +
+      CCAA_REGIONS.map((region) => {
+        const n = totals.get(region.id);
+        const title = `${region.name}: ${n ? `${nf.format(n)} ${n === 1 ? 'participación' : 'participaciones'}` : 'sin participaciones'}`;
+        return `<g fill="${colorById.get(region.id) || '#d8dde5'}"><title>${esc(title)}</title>${dotMarkup(CCAA_MAP_DOTS[region.id], region.id === 'canarias')}</g>`;
+      }).join('') +
+      '<text x="20" y="320" fill="#647084" font-family="Inter, sans-serif" font-size="9">Canarias</text>';
+  }
+
+  /* ═════ Carga ═════ */
+  function setStatus(which, ok, text) {
+    $('#dot' + which).className = 'dot ' + (ok ? 'live' : 'copy');
+    $('#st' + which).textContent = text;
+  }
+  async function loadQuiz() {
+    try {
+      const t = await loadTab(CONFIG.sheet.quizTab);
+      const q = quizFromSheet(t);
+      if (!q.frag.length) throw new Error('La pestaña está vacía');
+      renderQuiz(q);
+      setStatus('Quiz', true, `Quiz en vivo, actualizado a las ${timeNow()}`);
+      $('#quizNotice').hidden = true;
+    } catch (e) {
+      console.warn('Quiz:', e);
+      renderQuiz(quizFromSnapshot());
+      setStatus('Quiz', false, `Quiz: copia del ${CONFIG.snapshotDate}`);
+      $('#quizNotice').hidden = false;
+      $('#quizNotice').textContent = `No se pudo leer la hoja en este momento, así que se muestra la copia del ${CONFIG.snapshotDate}. Si abres el archivo desde tu ordenador y no carga, prueba a servirlo por HTTP.`;
+    }
+  }
+  async function loadTally() {
+    try {
+      const t = await loadTab(CONFIG.sheet.tallyTab);
+      const rows = tallyFromSheet(t);
+      if (!rows.length) throw new Error('La pestaña está vacía');
+      TALLY = rows;
+      setStatus('Tally', true, `Tally en vivo, actualizado a las ${timeNow()}`);
+      $('#tallyNotice').hidden = true;
+    } catch (e) {
+      console.warn('Tally:', e);
+      TALLY = tallyFromSnapshot();
+      setStatus('Tally', false, `Tally: copia del ${CONFIG.snapshotDate}`);
+      $('#tallyNotice').hidden = false;
+      $('#tallyNotice').textContent = `Se muestra la copia del ${CONFIG.snapshotDate}: la pestaña «${CONFIG.sheet.tallyTab}» de la hoja todavía no está disponible. En cuanto exista, este bloque pasará a mostrar datos en vivo.`;
+    }
+    setupFilters();
+    renderTally();
+  }
+  let loading = false;
+  async function loadAll() {
+    if (loading) return;
+    loading = true;
+    const btn = $('#refresh');
+    btn.disabled = true; btn.textContent = 'Actualizando…';
+    document.querySelector('main').classList.add('loading');
+    await Promise.allSettled([loadQuiz(), loadTally()]);
+    document.querySelector('main').classList.remove('loading');
+    btn.disabled = false; btn.textContent = 'Actualizar datos';
+    loading = false;
+  }
+
+  /* ═════ Eventos ═════ */
+  $('#fCcaa').addEventListener('change', (e) => { state.ccaa = e.target.value; renderTally(); });
+  $('#fStore').addEventListener('change', (e) => { state.store = e.target.value; renderTally(); });
+  $('#fLine').addEventListener('change', (e) => { state.line = e.target.value; renderTally(); });
+  $('#reset').addEventListener('click', () => {
+    state.ccaa = state.store = state.line = '';
+    $('#fCcaa').value = $('#fStore').value = $('#fLine').value = '';
+    renderTally();
+  });
+  $('#refresh').addEventListener('click', loadAll);
+  setInterval(() => { if (!document.hidden) loadAll(); }, CONFIG.autoRefreshMin * 60000);
+
+  let toastT;
+  function toast(msg) {
+    const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+    clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2200);
+  }
+
+  $('#foot').textContent = `Samplia Insights. Fuentes: hoja «Sorteo Flor» (pestañas «${CONFIG.sheet.quizTab}» y «${CONFIG.sheet.tallyTab}»), que se leen al abrir y cada ${CONFIG.autoRefreshMin} minutos. Porcentajes sobre participaciones; en productos, respuesta múltiple.`;
+  loadAll();
+})();
+</script>
+</body>
+</html>
