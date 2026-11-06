@@ -15,7 +15,8 @@
     --dusk: #375395;      /* dato principal, suavizantes */
     --prussian: #0F1729;  /* texto */
     --blush: #FBDBDF;     /* realces suaves */
-    --melon: #E9455B;     /* perfumadores */
+    --melon: #E9455B;     /* estado "copiado" */
+    --sky: #6FB1E0;       /* perfumadores */
     --raspberry: #E0253F; /* acción e interacción */
     --brick: #B51A03;     /* avisos */
 
@@ -47,10 +48,11 @@
   .brand img { width: 28px; height: 28px; }
   .brand > span { color: var(--muted); font-weight: 500; }
   .spacer { flex: 1; }
-  .intro { padding: 26px 0 30px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: end; }
+  .intro { padding: 20px 0 24px; display: grid; gap: 14px; }
+  .hero-img { display: block; width: 100%; height: auto; max-height: 360px; object-fit: cover; border-radius: var(--radius-m); }
   h1 { margin: 0 0 8px; font-weight: 800; font-size: clamp(32px, 4.4vw, 52px); line-height: 1.04; letter-spacing: -.02em; }
   .intro p { margin: 0; color: var(--muted); max-width: 60ch; }
-  .sources { display: grid; gap: 6px; font-size: 13px; }
+  .sources { display: none; gap: 6px; font-size: 13px; }
   .src { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
   .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--grey-bar); flex: none; }
   .dot.live { background: #2E8B57; box-shadow: 0 0 0 3px rgba(46, 139, 87, .15); }
@@ -80,6 +82,7 @@
   .card h3 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
   .card .sub { margin: 3px 0 16px; font-size: 13px; color: var(--muted); max-width: 70ch; }
   .base { margin: 14px 0 0; padding-top: 10px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+  .rest-detail { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
   .regional { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 24px; align-items: start; }
   .regional-map { min-width: 0; }
   .regional-map svg { display: block; width: 100%; height: auto; }
@@ -103,6 +106,8 @@
   .total .v { font: 600 56px/1 var(--font-num); font-variant-numeric: tabular-nums; letter-spacing: -.03em; margin-top: 14px; }
   .total .l { font-weight: 600; margin-top: 8px; }
   .total .d { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .ticket-kpi { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .ticket-kpi .v { font-size: 54px; color: var(--dusk); }
   .podium { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 4px; }
   .pod { padding: 6px 18px 4px; border-left: 1px solid var(--line); min-width: 0; }
   .pod:first-child { border-left: 0; padding-left: 0; }
@@ -118,8 +123,8 @@
 
   /* Preguntas del quiz */
   .q { min-width: 0; }
-  .q .win { font-size: 15px; font-weight: 700; line-height: 1.3; margin: 2px 0 12px; min-height: 2.6em; }
-  .q .win small { display: block; font: 500 12.5px var(--font-num); color: var(--muted); margin-top: 3px; }
+  .q .win { font-size: 15px; font-weight: 700; line-height: 1.3; margin: 2px 0 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .q .win small { font: 500 12.5px var(--font-num); color: var(--muted); margin-left: 6px; }
 
   /* Barras horizontales */
   .hb { display: grid; grid-template-columns: minmax(110px, 38%) minmax(0, 1fr) 76px; align-items: center; gap: 10px; padding: 4px 0; font-size: 13.5px; }
@@ -158,7 +163,7 @@
     .quiz-top { grid-template-columns: 1fr; }
   }
   @media (max-width: 760px) {
-    .intro { grid-template-columns: 1fr; }
+    .hero-img { max-height: 220px; }
     .grid, .grid-3 { grid-template-columns: 1fr; }
     .regional { grid-template-columns: 1fr; gap: 12px; }
     .podium { grid-template-columns: 1fr; }
@@ -186,10 +191,7 @@
       <button type="button" class="btn" id="refresh">Actualizar datos</button>
     </div>
     <div class="intro">
-      <div>
-        <h1>Sorteo ¿Cuál es tu flor?</h1>
-        <p>Resultados del quiz de fragancias y de las participaciones que han enviado su ticket de compra.</p>
-      </div>
+      <img class="hero-img" src="Gemini_Generated_Image_hfilunhfilunhfil.jpg" alt="Descubre tu fragancia flor" />
       <div class="sources" aria-live="polite">
         <div class="src"><span class="dot" id="dotQuiz"></span><span id="stQuiz">Conectando con el quiz…</span></div>
         <div class="src"><span class="dot" id="dotTally"></span><span id="stTally">Conectando con Tally…</span></div>
@@ -205,8 +207,7 @@
     <section class="section" id="quiz">
       <div class="sec-head">
         <div>
-          <h2>El quiz</h2>
-          <p>Respuestas de la web cualestuflor.es, leídas de la hoja «Sorteo Flor».</p>
+          <h2>El test</h2>
         </div>
       </div>
       <p class="notice" id="quizNotice" hidden></p>
@@ -215,8 +216,13 @@
         <div class="card total">
           <h3>Participaciones</h3>
           <div class="v" id="quizN">–</div>
-          <div class="l">personas han hecho el quiz</div>
+          <div class="l">personas han hecho el test</div>
           <div class="d" id="quizPeriod"></div>
+          <div class="ticket-kpi">
+            <div class="v" id="quizTicketV">–</div>
+            <div class="l">enviaron el ticket de compra</div>
+            <div class="d" id="quizTicketD"></div>
+          </div>
         </div>
         <div class="card">
           <h3>Top 3 de fragancias</h3>
@@ -229,7 +235,7 @@
 
       <div class="card">
         <h3>La respuesta más votada en cada pregunta</h3>
-        <p class="sub">En negrita, la opción ganadora. Debajo, cómo se reparten todas las respuestas.</p>
+        <p class="sub">La opción más elegida en cada pregunta.</p>
         <div class="grid-3" id="questions"></div>
         <p class="base" id="baseQuestions"></p>
       </div>
@@ -239,8 +245,8 @@
     <section class="section" id="tally">
       <div class="sec-head">
         <div>
-          <h2>Participaciones con ticket</h2>
-          <p>Formulario del sorteo en Tally: qué han comprado, dónde y desde qué comunidad participan.</p>
+          <h2>Participaciones</h2>
+          <p>Qué han comprado, dónde y desde qué comunidad participan.</p>
         </div>
       </div>
       <p class="notice" id="tallyNotice" hidden></p>
@@ -262,7 +268,7 @@
         <div class="card wide">
           <h3>Ranking de fragancias</h3>
           <p class="sub">Porcentaje de participaciones que han comprado cada fragancia, sumando suavizante y perfumador.</p>
-          <div class="key"><span><i style="background:#375395"></i>Suavizante</span><span><i style="background:#E9455B"></i>Perfumador</span></div>
+          <div class="key"><span><i style="background:#375395"></i>Suavizante</span><span><i style="background:var(--sky)"></i>Perfumador</span></div>
           <div id="ranking"></div>
           <p class="base" id="baseRanking"></p>
         </div>
@@ -278,6 +284,7 @@
           <h3>Dónde los han comprado</h3>
           <p class="sub">Establecimiento declarado en el formulario.</p>
           <div id="stores"></div>
+          <p class="rest-detail" id="restoStores" hidden></p>
           <p class="base" id="baseStores"></p>
         </div>
 
@@ -334,7 +341,7 @@
     },
     lines: {
       S: { name: 'Suavizante concentrado', group: 'Suavizantes concentrados', hex: '#375395' },
-      P: { name: 'Perfumador líquido', group: 'Perfumadores líquidos', hex: '#E9455B' },
+      P: { name: 'Perfumador líquido', group: 'Perfumadores líquidos', hex: '#6FB1E0' },
       O: { name: 'Otros', group: 'Otros', hex: '#8A8F9B' }
     },
     topStores: 8
@@ -440,6 +447,7 @@
 
   function renderQuiz(q) {
     const n = q.frag.length;
+    QUIZ_N = n;
     $('#quizN').textContent = nf.format(n);
     const ds = q.dates.map(parseEsDate).filter(Boolean).sort((a, b) => a - b);
     $('#quizPeriod').textContent = ds.length ? `Del ${longDay(ds[0])} al ${longDay(ds[ds.length - 1])}` : '';
@@ -471,15 +479,11 @@
       return `<div class="q">
         <h3 style="font-size:14px;color:var(--muted);font-weight:600">${esc(qq.title)}</h3>
         <div class="win">${esc(winTxt)}<small>${pf(maxC / tot)} de las respuestas${winners.length > 1 ? ', empate' : ''}</small></div>
-        ${c.map(([a, k]) => `<div class="hb${k === maxC ? ' top' : ''}" title="${esc(stripLetter(a))}: ${nf.format(k)}">
-            <span class="n">${esc(stripLetter(a))}</span>
-            <span class="track"><span class="fill" style="background:${k === maxC ? '#375395' : 'rgba(15,23,41,.22)'}" data-w="${(k / maxC) * 100}"></span></span>
-            <span class="v">${pf(k / tot)}<small>${nf.format(k)}</small></span>
-          </div>`).join('')}
       </div>`;
     }).join('');
     $('#baseQuestions').textContent = `Base: ${nf.format(n)} respuestas. Una sola respuesta por pregunta.`;
     growBars($('#quiz'));
+    renderTally();
   }
 
   /* ═════ Sección 2: Tally ═════ */
@@ -520,6 +524,7 @@
   const tallyFromSnapshot = () => JSON.parse($('#snapshot-tally').textContent).map((r) => ({ t: r.t, p: r.p, s: r.s, c: r.c }));
 
   let TALLY = [];
+  let QUIZ_N = 0;
   const state = { ccaa: '', store: '', line: '' };
   const CCAA_REGIONS = [
     { id: 'andalucia', name: 'Andalucía', aliases: [] },
@@ -616,6 +621,8 @@
       { v: n ? pf(multi / n) : '–', l: 'Compran más de un producto', d: `${nf.format(multi)} participaciones` },
       { v: nf.format(regions), l: 'Comunidades autónomas', d: 'con al menos una participación' }
     ].map((x) => `<div class="kpi"><div class="v">${x.v}</div><div class="l">${x.l}</div><div class="d">${x.d}</div></div>`).join('');
+    $('#quizTicketV').textContent = QUIZ_N ? pf(TALLY.length / QUIZ_N) : '–';
+    $('#quizTicketD').textContent = QUIZ_N ? `${nf.format(TALLY.length)} de ${nf.format(QUIZ_N)}` : '';
 
     // Ranking de fragancias: variedad = suavizante + perfumador.
     const vr = new Map();
@@ -637,7 +644,7 @@
         name: fragName(v), label: `${i + 1}. ${fragName(v)}`, n: c.any,
         segs: [
           { n: c.any * (c.S / tot), color: '#375395', title: `Suavizante ${fragName(v)} (${c.S})` },
-          { n: c.any * (c.P / tot), color: '#E9455B', title: `Perfumador ${fragName(v)} (${c.P})` }
+          { n: c.any * (c.P / tot), color: '#6FB1E0', title: `Perfumador ${fragName(v)} (${c.P})` }
         ].filter((s) => s.n > 0)
       };
     }), n);
@@ -652,7 +659,9 @@
     const mentions = Object.values(pc).reduce((a, b) => a + b, 0);
     $('#baseProds').textContent = `Base: ${nf.format(n)} participaciones, ${nf.format(mentions)} menciones. Respuesta múltiple.`;
 
-    simple($('#stores'), rows, 's', CONFIG.topStores);
+    const restoStores = simple($('#stores'), rows, 's', CONFIG.topStores);
+    $('#restoStores').hidden = !restoStores.length;
+    $('#restoStores').textContent = restoStores.length ? `Incluye en «Resto»: ${restoStores.join(', ')}.` : '';
     $('#baseStores').textContent = `Base: ${nf.format(n)} participaciones.`;
     renderCcaa(rows);
     $('#baseCcaa').innerHTML = `Base: ${nf.format(n)} participaciones. Canarias se muestra en un detalle; los puntos representan comunidades autónomas, no localidades. Cartografía: <a href="https://github.com/josemamira/covid19maps/blob/master/src/data/ccaa_min.geojson" target="_blank" rel="noopener noreferrer">GeoJSON de josemamira/covid19maps</a>.`;
@@ -663,13 +672,16 @@
     let items = countBy(rows.map((r) => r[key]).filter(Boolean)).map(([k, c]) => ({ name: k, n: c, color: '#375395' }));
     const other = items.find((i) => i.name === 'Otro establecimiento');
     if (other) { items = items.filter((i) => i !== other); other.color = 'rgba(15,23,41,.35)'; }
+    let restNames = [];
     if (limit && items.length > limit) {
       const rest = items.slice(limit);
+      restNames = rest.map((i) => `${i.name} (${nf.format(i.n)})`);
       items = items.slice(0, limit);
       items.push({ name: `Resto (${rest.length})`, n: rest.reduce((s, i) => s + i.n, 0), color: 'rgba(15,23,41,.35)' });
     }
     if (other) items.push(other);
     hbars(el, items, rows.length);
+    return restNames;
   }
   function renderCcaa(rows) {
     const totals = new Map(CCAA_REGIONS.map((region) => [region.id, 0]));
