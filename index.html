@@ -115,7 +115,6 @@
   .pod .nm { font-size: 19px; font-weight: 700; line-height: 1.2; margin: 4px 0 10px; min-height: 2.4em; }
   .pod:first-child .nm { color: var(--dusk); }
   .pod .pc { font: 600 30px/1 var(--font-num); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
-  .pod .n { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
   .pod .bar { height: 6px; border-radius: 3px; background: var(--faint); margin-top: 12px; overflow: hidden; }
   .pod .bar span { display: block; height: 100%; width: 0; border-radius: 3px; background: var(--dusk); transition: width 260ms var(--ease-out); }
   .pod:not(:first-child) .bar span { background: rgba(55, 83, 149, .55); }
@@ -132,7 +131,6 @@
   .hb .track { display: flex; height: 14px; background: var(--faint); border-radius: 3px; overflow: hidden; }
   .hb .fill { display: block; height: 100%; width: 0; transition: width 260ms var(--ease-out); }
   .hb .v { text-align: right; font-family: var(--font-num); font-variant-numeric: tabular-nums; font-size: 13px; }
-  .hb .v small { color: var(--muted); font-size: 11.5px; margin-left: 4px; }
   .hb.top .n { font-weight: 700; }
   .q .hb { grid-template-columns: minmax(0, 1fr) 64px; grid-template-areas: "n v" "t t"; gap: 3px 10px; padding: 5px 0; }
   .q .hb .n { grid-area: n; white-space: normal; font-size: 13px; }
@@ -460,7 +458,6 @@
         <div class="rk">${i + 1}.º</div>
         <div class="nm">${esc(name)}</div>
         <div class="pc">${pf(c / n)}</div>
-        <div class="n">${nf.format(c)} personas</div>
         <div class="bar"><span data-w="${(c / max) * 100}"></span></div>
       </div>`).join('') || '<div class="empty">Aún no hay respuestas.</div>';
     // Empates en torno al podio
@@ -601,7 +598,7 @@
       html += `<div class="hb" title="${esc(it.name)}: ${nf.format(it.n)}">
         <span class="n">${esc(it.label || it.name)}</span>
         <span class="track">${segs.map((s) => `<span class="fill" style="background:${s.color}" data-w="${base ? (s.n / max) * 100 : 0}" title="${esc(s.title || it.name)}: ${nf.format(s.n)}"></span>`).join('')}</span>
-        <span class="v">${base ? pf(it.n / base) : '–'}<small>${nf.format(it.n)}</small></span>
+        <span class="v">${base ? pf(it.n / base) : '–'}</span>
       </div>`;
     });
     el.innerHTML = html || '<div class="empty">No hay participaciones con estos filtros. Prueba a quitar alguno.</div>';
